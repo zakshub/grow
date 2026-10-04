@@ -117,9 +117,15 @@ Key files:
 15. `docs/14_MEASUREMENT_AND_LEARNING.md` defines success metrics and learning loops
 16. `docs/15_RESEARCH_AND_EVIDENCE.md` defines evidence standards
 17. `docs/16_OPEN_QUESTIONS.md` tracks unresolved product decisions
+18. `docs/17_FEATURE_INVENTORY.md` consolidates the complete planned feature set
+19. `docs/18_IMPLEMENTATION_HANDOFF.md` tells Codex and future engineers how to start without reinterpreting the product
 
 ## Current status
 
 Foundation stage.
 
-The immediate goal is to turn the concept into a testable WhatsApp first career discovery service with a rigorous career guidance engine before attempting national scale or full automation.
+The product brain, vision, audience model, career consultant logic, assessment model, participant journey, WhatsApp operating model, acquisition model, fee model, safety rules, system architecture, automation boundaries, MVP plan, roadmap, metrics, evidence standards, open questions, feature inventory, and implementation handoff are now documented.
+
+The next step is not to build every feature.
+
+The next step is to validate the guidance model with a small real cohort, then implement the MVP in the order defined by `docs/18_IMPLEMENTATION_HANDOFF.md`.
