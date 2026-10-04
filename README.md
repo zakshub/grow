@@ -119,12 +119,15 @@ Key files:
 17. `docs/16_OPEN_QUESTIONS.md` tracks unresolved product decisions
 18. `docs/17_FEATURE_INVENTORY.md` consolidates the complete planned feature set
 19. `docs/18_IMPLEMENTATION_HANDOFF.md` tells Codex and future engineers how to start without reinterpreting the product
+20. `docs/technical/README.md` indexes the implementation-ready technical planning layer derived from the product brain
 
 ## Current status
 
 Foundation stage.
 
 The product brain, vision, audience model, career consultant logic, assessment model, participant journey, WhatsApp operating model, acquisition model, fee model, safety rules, system architecture, automation boundaries, MVP plan, roadmap, metrics, evidence standards, open questions, feature inventory, and implementation handoff are now documented.
+
+The technical planning layer is now documented under `docs/technical/`. Implementation has not started.
 
 The next step is not to build every feature.
 
