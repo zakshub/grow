@@ -58,6 +58,12 @@ Defines evidence standards, external framework research, labour market evidence,
 16. `16_OPEN_QUESTIONS.md`
 Tracks unresolved product, operational, assessment, business, and technical decisions.
 
+17. `17_FEATURE_INVENTORY.md`
+Consolidates the complete planned capability set across participant acquisition, assessment, career intelligence, recommendations, fees, follow up, analytics, safety, infrastructure, and future institutional use.
+
+18. `18_IMPLEMENTATION_HANDOFF.md`
+Defines the build order, engineering boundaries, domain model expectations, testing rules, and the correct starting instructions for Codex or another implementation agent.
+
 ## Canonical rule
 
 If future implementation, design, research, or automation conflicts with these documents, the conflict should be surfaced explicitly rather than silently overriding the product brain.
