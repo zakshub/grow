@@ -12,6 +12,7 @@ class HumanReview(UUIDModel, TimeStampedModel):
         UNKNOWN = "unknown", "Unknown"
         MINOR_HANDLING = "minor_handling", "Minor handling"
         EVIDENCE_CONTRADICTION = "evidence_contradiction", "Evidence contradiction"
+        ASSESSMENT_EVIDENCE = "assessment_evidence", "Assessment evidence"
         ACCESS = "access", "Access"
         FOUNDATION = "foundation", "Foundation workflow"
 

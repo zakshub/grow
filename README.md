@@ -127,11 +127,11 @@ Foundation stage.
 
 The product brain, vision, audience model, career consultant logic, assessment model, participant journey, WhatsApp operating model, acquisition model, fee model, safety rules, system architecture, automation boundaries, MVP plan, roadmap, metrics, evidence standards, open questions, feature inventory, and implementation handoff are now documented.
 
-The technical planning layer is documented under `docs/technical/`. The synthetic local Milestone 1 domain foundation is implemented; [`docs/implementation/00_CURRENT_STATE.md`](docs/implementation/00_CURRENT_STATE.md) is the factual source of truth for code-backed capabilities.
+The technical planning layer is documented under `docs/technical/`. The synthetic local domain foundation and deterministic Milestone 2 assessment/evidence engine are implemented; [`docs/implementation/00_CURRENT_STATE.md`](docs/implementation/00_CURRENT_STATE.md) is the factual source of truth for code-backed capabilities.
 
 The next step is not to build every feature.
 
-The next implementation step is the deterministic assessment/evidence engine defined as Milestone 2, after owner review of the Milestone 1 schema and state shell. Real participant operation remains blocked by the production privacy and safety gates.
+The next implementation step is the Milestone 3 career intelligence registry after owner review of the Milestone 2 evidence contracts. Real participant operation remains blocked by assessment validation and the production privacy and safety gates.
 
 ## Developer setup
 
@@ -142,6 +142,7 @@ python -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -e ".[dev]"
 .\.venv\Scripts\python.exe manage.py migrate
 .\.venv\Scripts\python.exe manage.py load_synthetic_fixtures
+.\.venv\Scripts\python.exe manage.py load_synthetic_assessment_pack
 .\.venv\Scripts\python.exe -m pytest
 ```
 
