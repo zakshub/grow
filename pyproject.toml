@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "grow-foundation"
-version = "0.2.0"
-description = "Synthetic deterministic domain and assessment foundation for Grow"
+version = "0.3.0"
+description = "Synthetic deterministic assessment and career-intelligence foundation for Grow"
 requires-python = ">=3.13"
 dependencies = [
   "Django>=5.2,<5.3",

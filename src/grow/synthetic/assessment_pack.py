@@ -345,7 +345,7 @@ ASSESSMENT_SCENARIOS = {
 }
 
 
-def _create_catalog() -> dict[str, AssessmentDimension]:
+def create_dimension_catalog() -> dict[str, AssessmentDimension]:
     dimensions: dict[str, AssessmentDimension] = {}
     for category, names in DIMENSION_CATALOG.items():
         for name in names:
@@ -585,7 +585,7 @@ def _respond(session: AssessmentSession, item_code: str, value: object) -> None:
 @transaction.atomic
 def create_synthetic_assessment_pack() -> dict[str, AssessmentSession]:
     participants = create_synthetic_scenarios()
-    dimensions = _create_catalog()
+    dimensions = create_dimension_catalog()
     version = _create_definition(dimensions)
     sessions: dict[str, AssessmentSession] = {}
     answer_plan: dict[str, tuple[tuple[str, object], ...]] = {

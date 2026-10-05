@@ -72,7 +72,7 @@ Start with [`technical/00_TECHNICAL_PLAN.md`](technical/00_TECHNICAL_PLAN.md), t
 
 ## Implemented reality
 
-[`implementation/00_CURRENT_STATE.md`](implementation/00_CURRENT_STATE.md) is the factual source of truth for capabilities proven in code and tests. [`implementation/02_MILESTONE_2_ASSESSMENT_ENGINE.md`](implementation/02_MILESTONE_2_ASSESSMENT_ENGINE.md) documents the implemented deterministic assessment/evidence engine. [`adr/README.md`](adr/README.md) indexes accepted architecture decisions. Planning documents remain intended architecture, not proof of implementation.
+[`implementation/00_CURRENT_STATE.md`](implementation/00_CURRENT_STATE.md) is the factual source of truth for capabilities proven in code and tests. [`implementation/02_MILESTONE_2_ASSESSMENT_ENGINE.md`](implementation/02_MILESTONE_2_ASSESSMENT_ENGINE.md) documents the implemented deterministic assessment/evidence engine. [`implementation/03_MILESTONE_3_CAREER_INTELLIGENCE.md`](implementation/03_MILESTONE_3_CAREER_INTELLIGENCE.md) documents the participant-independent versioned career registry. [`adr/README.md`](adr/README.md) indexes accepted architecture decisions. Planning documents remain intended architecture, not proof of implementation.
 
 ## Canonical rule
 

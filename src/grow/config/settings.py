@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "grow.participants",
     "grow.journeys",
     "grow.assessments",
+    "grow.careers",
     "grow.reviews",
     "grow.access",
     "grow.followups",

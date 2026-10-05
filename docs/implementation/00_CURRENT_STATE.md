@@ -6,12 +6,12 @@ Last verified: 2026-10-05
 
 ## Milestone status
 
-Pre-implementation technical decisions, the synthetic Milestone 1 domain foundation, and the deterministic Milestone 2 assessment/evidence engine are implemented. There is no real participant operation, WhatsApp integration, external AI, speech, career taxonomy, career matching, recommendation object/logic, experiment workflow, payment processing, production authentication/RBAC, or production deployment.
+Pre-implementation technical decisions, the synthetic Milestone 1 domain foundation, the deterministic Milestone 2 assessment/evidence engine, and the synthetic Milestone 3 versioned career-intelligence registry are implemented. There is no real participant operation, WhatsApp integration, external AI, speech, participant-to-career matching, recommendation object/logic, experiment workflow, payment processing, production authentication/RBAC, or production deployment.
 
 ## Runtime foundation
 
 - Python 3.13+ package using Django 5.2 LTS.
-- `src/` modular-monolith layout with apps for participants, journeys, assessments/evidence, reviews/overrides, access/fees, follow-ups, and audit.
+- `src/` modular-monolith layout with apps for participants, journeys, assessments/evidence, career intelligence, reviews/overrides, access/fees, follow-ups, and audit.
 - PostgreSQL configuration is available and is the ADR-defined deployed source of truth.
 - SQLite is the default for zero-service local development and tests.
 - Django Admin registers domain records for development inspection only; it is not the operator UX or production authorisation model.
@@ -27,6 +27,7 @@ Committed migrations create these domain tables:
 | `participants` | `Participant`, `ParticipantIdentifier`, `ParticipantProfile`, `ConsentRecord`, `GuardianRelationship`, `ReferralSource` |
 | `journeys` | `ParticipantJourney`, `StateTransition` |
 | `assessments` | `AssessmentDefinition`, `AssessmentVersion`, `AssessmentSection`, `AssessmentDimension`, `AssessmentDimensionRequirement`, `AssessmentItem`, `AssessmentItemVariant`, `AssessmentSession`, `AssessmentItemPresentation`, `AssessmentResponse`, `AssessmentObservation`, `EvidenceSource`, `EvidenceItem`, `DimensionEvidence`, `DimensionResult`, `Contradiction`, `ContradictionEvidence` |
+| `careers` | `CareerTaxonomy`, `CareerTaxonomyVersion`, `CareerCluster`, `CareerFamily`, `CareerProfile`, `CareerProfileVersion`, `CareerAlias`, `CareerRelationship`, `CareerDimensionRelationship`, `CareerEnvironmentObservation`, `CareerSkill`, `CareerSkillRequirement`, `CareerPathway`, `ResearchSource`, `MarketObservation`, `CareerReviewDecision`, `CareerImportBatch`, `CareerImportDiff` |
 | `reviews` | `HumanReview`, `HumanOverride` |
 | `grow_access` | `AccessDecision` |
 | `followups` | `FollowUp` |
@@ -39,6 +40,8 @@ All domain primary keys are random UUIDs. Direct/external identifiers are separa
 UNKNOWN is explicit for participant/profile status, age knowledge, minor status, guardian requirement, consent, referral source, assessment/session sufficiency, dimension sufficiency/confidence, evidence category/value/direction/confidence, contradiction resolution, human review, access category/decision, and follow-up/outcome.
 
 Evidence marked UNKNOWN cannot contain a numeric/text value. UNKNOWN confidence cannot contain a numeric score. Missing age does not become age zero. Pending access candidates do not become a final fee category.
+
+Career market UNKNOWN cannot contain a value or unit and is never interpreted as zero demand or salary. Career sources and observations also preserve `CURRENT`, `STALE`, `RETIRED`, and `UNKNOWN` freshness. Expiry makes effective freshness stale without mutating the historical row.
 
 ### Evidence and contradiction
 
@@ -61,6 +64,21 @@ Contradictions link at least two evidence items from the same journey and dimens
 - A deterministic participant assessment snapshot reports knowns, unknowns, evidence counts, confidence, contradiction state, completion, review need, and next assessment action. It contains no career recommendation.
 
 The exact rules and limitations are documented in `02_MILESTONE_2_ASSESSMENT_ENGINE.md`.
+
+## Versioned career intelligence registry
+
+- Taxonomies contain version-pinned clusters, families, career profile versions, aliases, and career relationships. Careers themselves use stable database codes rather than enums.
+- Taxonomy/profile lifecycle is `DRAFT`, `PILOT`, `ACTIVE`, or `RETIRED`; the separate human workflow is `DRAFT`, `IN_REVIEW`, `APPROVED`, `PUBLISHED`, `STALE`, or `RETIRED`.
+- Published taxonomy and profile content is application-immutable. Corrections create new versions or superseding evidence, retaining historical reproducibility.
+- Career profile relationships reuse the 81-dimension assessment taxonomy and separately preserve cognitive, work-style, communication, creativity, interest, value, and environment evidence. Every relation carries qualitative relevance, direction, confidence, source, limitations, version/status, and optional context.
+- Skills and ten pathway route types are supported with geography, requirements, time/cost categories, prerequisites, next step, evidence, limitations, review/freshness, and supersession.
+- Research sources preserve type, title/publisher/reference, dates, geography, methodology, limitations, licence notes, quality, review, freshness, expiry, and supersession.
+- Market observations cover demand, sourced salary ranges, entry difficulty, remote/freelance relevance, automation exposure, international mobility, hiring concentration, and training availability, with geography and work context. The synthetic pack supplies no numeric market claims.
+- Deterministic staged imports validate `career-import-v1`, hash the payload, diff stable codes as new/changed/removed, require human approval, and publish a new immutable version. They cannot fetch or scrape external content.
+- `build_career_snapshot` returns career information, unknowns, freshness, evidence, routes, and limitations only. It accepts no participant or assessment input and performs no matching/ranking.
+- Django Admin is a read-only inspection surface for registry, evidence freshness, publication, and import diffs. Human review/import services emit append-only review decisions and audit events.
+
+The exact contracts and boundaries are documented in `03_MILESTONE_3_CAREER_INTELLIGENCE.md`.
 
 ### Human review and overrides
 
@@ -125,14 +143,16 @@ Run `python manage.py load_synthetic_fixtures` after migrations. No names, phone
 
 The separate idempotent `load_synthetic_assessment_pack` command creates ten progressive assessment cases: Grade 8 unsure, Matric logical/investigative, Intermediate creative/communication, University conflicting preferences, Graduate uncertain, adult career switcher, highly contradictory self-report, mostly unknown, stopped early, and assessment human review required. All assessment wording and responses are explicitly synthetic pilot material.
 
+The idempotent `load_synthetic_career_pack` command creates 12 reference careers: Software Developer, Data Analyst, UX / Product Designer, Graphic Designer, Teacher, Sales / Business Development, Accountant, Research Assistant, Mechanical Technician, Digital Marketer, Nurse, and Lawyer. Every profile is explicitly `SYNTHETIC`, `REFERENCE_ONLY`, and `NOT_READY_FOR_PARTICIPANT_RECOMMENDATION`; all bundled demand, remote, and salary observations are UNKNOWN.
+
 ## Validation implemented
 
 - Formatting: Ruff formatter.
 - Linting: Ruff rules for Python, imports, bug patterns, upgrades, and Django.
 - Type checks: mypy on `src` and `tests` with migrations excluded.
 - Django system checks and migration drift check.
-- Pytest domain suite: 96 tests passing at the last verification.
-- GitHub Actions is configured with PostgreSQL 18 to validate the same gates.
+- Pytest domain suite: 126 tests passing at the last verification.
+- GitHub Actions is configured with PostgreSQL 18 to run migrations, all three synthetic loaders, and the same code-quality/test gates.
 - Local PostgreSQL validation was unavailable on 2026-10-05 because no PostgreSQL service or Docker daemon was running. Fresh SQLite migration and fixture validation passed; PostgreSQL remains a CI/deployment gate, not a locally proven result.
 
 The test count must be updated here whenever coverage changes; CI output remains the execution evidence.
@@ -142,7 +162,7 @@ The test count must be updated here whenever coverage changes; CI output remains
 1. Python 3.13 is used because it is the available runtime; the plan recommended Python 3.14. The project declares `>=3.13` and remains compatible with a later supported upgrade.
 2. Redis/Dramatiq are boundary decisions only, not dependencies, because Milestone 1 has no asynchronous jobs.
 3. SQLite is used locally for speed; PostgreSQL is configured as the authoritative deployment database, and CI is set up to exercise it. This local validation did not exercise PostgreSQL.
-4. Career cluster/profile, recommendation, and practical-experiment domain models from the broader handoff remain intentionally unimplemented because Milestone 2 prohibits career intelligence and recommendations. State names remain to validate the workflow shell.
+4. Career intelligence is now implemented as a separate participant-independent registry. Recommendation and practical-experiment domain models remain intentionally unimplemented because Milestone 3 prohibits matching and recommendations.
 5. Django Admin is inspection-only; production operator access is not implemented.
 6. The 81 dimensions are an engineering taxonomy. The bundled pilot version requires only eight dimensions and uses 14 synthetic items; neither set is a validated instrument.
 7. Numeric confidence is retained internally only for deterministic reproducibility and maps to displayed bands. Its thresholds are pilot workflow controls, not scientific precision.
@@ -161,6 +181,8 @@ The test count must be updated here whenever coverage changes; CI output remains
 - Evidence independence is represented by a stored key and needs source-specific anti-duplication policy.
 - Evidence timestamps are retained, but recency is not weighted without dimension-specific research.
 - Synthetic Urdu wording, reading level, accessibility, cultural interpretation, and assessment thresholds require human research and pilot validation.
+- Synthetic career descriptions and mappings are architecture fixtures, not approved career content. Pakistan taxonomy ownership, completeness thresholds, source/licence policy, pathway/regulatory research, market sources, and refresh cadences remain unresolved.
+- Import schema v1 covers taxonomy/profile identity and text only; field-level evidence bundle import and impact analysis need later schemas.
 
 ## Remaining blockers
 
@@ -169,7 +191,7 @@ The test count must be updated here whenever coverage changes; CI output remains
 - Retention, deletion, backup expiry, and production encryption policy.
 - Production operator authentication, RBAC, MFA, access review, and incident response.
 - Validated assessment instruments, approved Urdu adaptation, evidence sufficiency calibration, and confidence calibration. The implemented rules are synthetic pilot engineering controls only.
-- Career taxonomy, market sources, experiments, recommendations, and reviewer rubrics.
+- Approved Pakistan career taxonomy/granularity, market/source research, profile completeness rules, career publication ownership, experiments, recommendations, and reviewer rubrics.
 - Fee eligibility/approver and payment rules.
 - WhatsApp, speech, AI, infrastructure, and pilot decisions.
 
@@ -177,4 +199,4 @@ The full classification is in `01_OPEN_DECISION_CLASSIFICATION.md`.
 
 ## Next milestone readiness
 
-The repository is ready to begin Milestone 3 only after owner review confirms the Milestone 2 evidence, versioning, sufficiency, and snapshot contracts. Recommended Milestone 3 is a versioned career intelligence registry with synthetic reference data only: taxonomy/profile versions, multi-dimensional signal requirements, pathways, research sources, market observations, geography, freshness/expiry, unknown values, and review/publish workflow. It must not rank careers or generate participant recommendations.
+The repository is ready to begin Milestone 4 only after owner review confirms the Milestone 2 assessment snapshot and Milestone 3 career snapshot/version contracts. Recommended Milestone 4 is a deterministic, transparent recommendation engine using frozen inputs/configuration, multi-signal candidate generation, support/conflict/unknown explanations, separate capability and feasibility, confidence/review triggers, and immutable human overrides. It must not use AI, make unsupported market claims, or deliver unreviewed participant advice.
