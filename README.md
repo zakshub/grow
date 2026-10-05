@@ -127,8 +127,22 @@ Foundation stage.
 
 The product brain, vision, audience model, career consultant logic, assessment model, participant journey, WhatsApp operating model, acquisition model, fee model, safety rules, system architecture, automation boundaries, MVP plan, roadmap, metrics, evidence standards, open questions, feature inventory, and implementation handoff are now documented.
 
-The technical planning layer is now documented under `docs/technical/`. Implementation has not started.
+The technical planning layer is documented under `docs/technical/`. The synthetic local Milestone 1 domain foundation is implemented; [`docs/implementation/00_CURRENT_STATE.md`](docs/implementation/00_CURRENT_STATE.md) is the factual source of truth for code-backed capabilities.
 
 The next step is not to build every feature.
 
-The next step is to validate the guidance model with a small real cohort, then implement the MVP in the order defined by `docs/18_IMPLEMENTATION_HANDOFF.md`.
+The next implementation step is the deterministic assessment/evidence engine defined as Milestone 2, after owner review of the Milestone 1 schema and state shell. Real participant operation remains blocked by the production privacy and safety gates.
+
+## Developer setup
+
+Requires Python 3.13+.
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -e ".[dev]"
+.\.venv\Scripts\python.exe manage.py migrate
+.\.venv\Scripts\python.exe manage.py load_synthetic_fixtures
+.\.venv\Scripts\python.exe -m pytest
+```
+
+SQLite is the local default. Set the PostgreSQL variables shown in `.env.example` to validate against PostgreSQL. Never use real participant data in development or tests.

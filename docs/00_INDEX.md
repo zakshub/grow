@@ -70,6 +70,10 @@ The implementation-ready technical planning layer is indexed at [`technical/READ
 
 Start with [`technical/00_TECHNICAL_PLAN.md`](technical/00_TECHNICAL_PLAN.md), then follow the numbered architecture, domain, data, state, engine, integration, security, infrastructure, testing, milestone, and risk documents. These documents translate the product brain into a build plan; they do not override this canonical product authority.
 
+## Implemented reality
+
+[`implementation/00_CURRENT_STATE.md`](implementation/00_CURRENT_STATE.md) is the factual source of truth for capabilities proven in code and tests. [`adr/README.md`](adr/README.md) indexes accepted architecture decisions. Planning documents remain intended architecture, not proof of implementation.
+
 ## Canonical rule
 
 If future implementation, design, research, or automation conflicts with these documents, the conflict should be surfaced explicitly rather than silently overriding the product brain.

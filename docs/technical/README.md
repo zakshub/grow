@@ -22,4 +22,4 @@ This directory converts the canonical Grow product brain into an implementation-
 
 ## Planning status
 
-Planning baseline as of 2026-10-04. Implementation has not started. Unresolved decisions remain explicitly unresolved rather than being encoded as requirements.
+Planning baseline as of 2026-10-04. The synthetic Milestone 1 foundation has since been implemented; see [`../implementation/00_CURRENT_STATE.md`](../implementation/00_CURRENT_STATE.md) for factual reality. Unresolved decisions remain explicitly unresolved rather than being encoded as requirements.
